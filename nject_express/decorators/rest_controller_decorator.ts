@@ -12,10 +12,14 @@ import {
 
 export function RestController(path: string = "") {
   return function (constructor: Constructor) {
-    Component(EXPRESS_CONTEXT_NAME, [REST_TAG], ExpressIdType.CONTROLLER)(constructor);
+    Component(
+      EXPRESS_CONTEXT_NAME,
+      [REST_TAG],
+      ExpressIdType.CONTROLLER
+    )(constructor);
 
     const constructorId = ExpressIdBuilder.fromController(constructor).build();
-    const handlers: [string, HTTPRouteHandlerModel][] =
+    const handlers: [string, boolean, HTTPRouteHandlerModel][] =
       (constructor as any).handlers ?? [];
 
     const params: Map<string, Array<[number, RouteHandlerParameter]>> = (
@@ -26,11 +30,12 @@ export function RestController(path: string = "") {
       EXPRESS_CONTEXT_NAME
     ) as ExpressApplicationContext;
 
-    handlers.forEach(([_, model]) => {
-      model.Route.addPrefix(path);
-    });
+    const intermediateHandlers = handlers.map(([id, detatched, model]) => {
+      if (!detatched) model.Route.addPrefix(path);
+      return [id, model];
+    }) as [string, HTTPRouteHandlerModel][];
 
-    const handlersWithParams = handlers.map(([id, model]) => {
+    const handlersWithParams = intermediateHandlers.map(([id, model]) => {
       const handlerParams = params.get(id) ?? [];
       handlerParams.sort((a, b) => a[0] - b[0]);
       return [id, model, handlerParams.map(([_, parameter]) => parameter)];

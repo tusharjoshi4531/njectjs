@@ -6,7 +6,8 @@ import { ExpressIdBuilder } from "../util/id_util";
 export function RestHandler(
   method: HttpMethod,
   path: string = "",
-  order: number = 0
+  order: number = Number.MAX_SAFE_INTEGER,
+  detatched: boolean = false
 ) {
   return function (
     targetPrototype: any,
@@ -19,13 +20,15 @@ export function RestHandler(
       target.handlers = [];
     }
 
-    const handlerId = ExpressIdBuilder.fromHandler(propertyKey.toString()).build();
+    const handlerId = ExpressIdBuilder.fromHandler(
+      propertyKey.toString()
+    ).build();
     const routeHandlerModel = new HTTPRouteHandlerModel(
       order,
       new HTTPRouteModel(path, method)
     );
 
-    target.handlers.push([handlerId, routeHandlerModel]);
+    target.handlers.push([handlerId, detatched, routeHandlerModel]);
   };
 }
 

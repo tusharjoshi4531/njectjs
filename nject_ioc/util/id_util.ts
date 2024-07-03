@@ -1,5 +1,5 @@
 import { Constructor } from "./types";
-const sep = ":";
+const sep = "::";
 
 export class IdType {
   static COMPONENT = "component";

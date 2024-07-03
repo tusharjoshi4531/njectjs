@@ -25,3 +25,12 @@ export function RequestParam(paramType: RouteHandlerParameter) {
     params.get(handlerId)!.push([parameterIndex, paramType]);
   };
 }
+
+export const RequestObject = RequestParam(RouteHandlerParameter.REQUEST);
+export const RequestBody = RequestParam(RouteHandlerParameter.REQUEST_BODY);
+export const RequestQuery = RequestParam(RouteHandlerParameter.REQUSET_QUERY);
+export const PathVariable = RequestParam(RouteHandlerParameter.REQUEST_PARAMS);
+export const RequestHeaders = RequestParam(
+  RouteHandlerParameter.REQUEST_HEADERS
+);
+export const ResponseObject = RequestParam(RouteHandlerParameter.RESPONSE);

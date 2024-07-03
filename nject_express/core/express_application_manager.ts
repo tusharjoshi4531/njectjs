@@ -54,6 +54,7 @@ export class ExpressApplicationManager {
       const routeModel = HTTPRouteModel.fromString(route);
       const method = routeModel.Method;
       const path = routeModel.Path;
+      console.log({ path });
 
       const requestHandlers = handlersWithParams.map(([handlerId, params]) => {
         const requestHandler = this.createExpessHandler(handlerId, params);
@@ -86,18 +87,25 @@ export class ExpressApplicationManager {
       );
 
       const fn = controllerObject[handlerName].bind(controllerObject);
-      const result = await fn(...functionParams);
 
-      if (functionParams.length > 0) console.log("T ", functionParams[0]);
-      if (result instanceof ResponseEntity) {
-        return res.status(result.Status).json(result.Body);
-      } else if (result instanceof NextEntity) {
-        result.updateRequest(req);
-        return next();
-      } else {
+      try {
+        const result = await fn(...functionParams);
+
+        if (functionParams.length > 0) console.log("T ", functionParams[0]);
+        if (result instanceof ResponseEntity) {
+          return res.status(result.Status).json(result.Body);
+        } else if (result instanceof NextEntity) {
+          result.updateRequest(req);
+          return next();
+        } else {
+          return res
+            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+            .json("Controller gives invalid response");
+        }
+      } catch (e) {
         return res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json("Controller gives invalid response");
+          .json({ message: "Uncaught exception in controllers" });
       }
     };
 

@@ -19,9 +19,6 @@ export class RouteHandlerManager {
     parentId: string,
     model: HTTPRouteHandlerModel
   ) {
-    if (this.handlerToPath.has(id)) {
-      throw ControllerError.handlerIdNotFound(id);
-    }
     this.handlerToPath.set(id, model);
     this.handlerToParent.set(id, parentId);
   }

@@ -66,17 +66,12 @@ export class IOCContext implements IOCContextInterface {
   }
 
   public build() {
-    console.log("BUILD");
+
     const order = this.dependancyManager.getResolutionOrder();
 
     for (const id of order) {
       const dependancies = this.dependancyManager.getDependancies(id);
       this.containerRepository.buildConstructorObject(id, dependancies);
     }
-
-    console.log({ order: order.join(", ") });
-    order.forEach((id) =>
-      console.log({ id: this.containerRepository.findObjectById(id) })
-    );
   }
 }

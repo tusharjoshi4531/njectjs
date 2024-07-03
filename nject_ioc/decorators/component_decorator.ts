@@ -12,7 +12,7 @@ export function Component(
       (constructor as any).dependancies ?? [];
 
     const context = contextRegistry.getContextById(contextId);
-    console.log({ context });
+
     const constructorId = IDBuilder.fromType(type)
       .addContent(constructor.name)
       .build();

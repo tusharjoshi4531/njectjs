@@ -16,7 +16,6 @@ export class RouteControllerManager {
     }
     this.controllerToRouteMap.set(id, path);
     this.handlerMap.set(id, handlerIds);
-    console.log({ con: this.controllerToRouteMap });
   }
 
   public getControllerRoute(id: string) {

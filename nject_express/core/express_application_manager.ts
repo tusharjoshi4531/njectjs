@@ -11,6 +11,9 @@ import { contextRegistry } from "../../nject_ioc/core/context_registry";
 import { EXPRESS_CONTEXT_NAME } from "../decorators/express_application_decorator";
 import { IDUtil } from "../../nject_ioc/util/id_util";
 import { HttpMethod } from "../util/http_util";
+import { ResponseEntity } from "./server_entities/server_response_entity";
+import { NextEntity } from "./server_entities/server_next_entity";
+import { HttpStatusCode } from "./server_entities/server_response_status";
 
 export interface ExpressServerOptions {
   port: number;
@@ -47,7 +50,6 @@ export class ExpressApplicationManager {
 
     const routes = this.routeHanlderManager.getAllRoutesWithHandlers();
 
-    console.log(routes[0]);
     routes.forEach(([route, handlersWithParams]) => {
       const routeModel = HTTPRouteModel.fromString(route);
       const method = routeModel.Method;
@@ -76,15 +78,27 @@ export class ExpressApplicationManager {
     const context = contextRegistry.getContextById(EXPRESS_CONTEXT_NAME);
     const controllerObject = context.getObjectByID(parentId);
 
-    const requestHandler: RequestHandler = (req, res, next) => {
+    console.log("p ", params.join(", "));
+
+    const requestHandler: RequestHandler = async (req, res, next) => {
       const functionParams = params.map((routeHandlerParam) =>
         RequestParamUtil.getProperty(routeHandlerParam, req, res)
       );
 
-      const result = controllerObject[handlerName](...functionParams);
-      console.log(result);
+      const fn = controllerObject[handlerName].bind(controllerObject);
+      const result = await fn(...functionParams);
 
-      res.status(200).json({ handlerName });
+      if (functionParams.length > 0) console.log("T ", functionParams[0]);
+      if (result instanceof ResponseEntity) {
+        return res.status(result.Status).json(result.Body);
+      } else if (result instanceof NextEntity) {
+        result.updateRequest(req);
+        return next();
+      } else {
+        return res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json("Controller gives invalid response");
+      }
     };
 
     return requestHandler;

@@ -22,8 +22,6 @@ export function RestController(path: string = "") {
       constructor as any
     ).params ?? new Map();
 
-    console.log({ par: params.get("a") });
-
     const context = contextRegistry.getContextById(
       EXPRESS_CONTEXT_NAME
     ) as ExpressApplicationContext;
@@ -35,7 +33,6 @@ export function RestController(path: string = "") {
     const handlersWithParams = handlers.map(([id, model]) => {
       const handlerParams = params.get(id) ?? [];
       handlerParams.sort((a, b) => a[0] - b[0]);
-      console.log({ hp: handlerParams });
       return [id, model, handlerParams.map(([_, parameter]) => parameter)];
     }) as [string, HTTPRouteHandlerModel, RouteHandlerParameter[]][];
 

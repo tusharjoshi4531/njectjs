@@ -1,6 +1,6 @@
 import { Request } from "express";
 
-export class ServerNextEntity {
+export class NextEntity {
   constructor(
     private requestBodyUpdates: Map<string, any> = new Map(),
     private requestHeaderUpdates: Map<string, string> = new Map()
@@ -16,14 +16,14 @@ export class ServerNextEntity {
   }
 
   static noUpdate() {
-    return new ServerNextEntity();
+    return new NextEntity();
   }
 
   static fromObject(
     body: Record<string, any> = {},
     headers: Record<string, string> = {}
   ) {
-    return new ServerNextEntity(
+    return new NextEntity(
       this.objectToMap(body),
       this.objectToMap(headers)
     );

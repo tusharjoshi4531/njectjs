@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "./server_response_status";
 
-class ResponseCategory {
+export class ResponseCategory {
   static INFO = "1";
   static SUCCESS = "2";
   static REDIRECT = "3";

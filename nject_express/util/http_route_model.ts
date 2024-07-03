@@ -1,4 +1,7 @@
+import { IDUtil } from "../../nject_ioc/util/id_util";
+import { HTTPRouteModelError } from "../error/route_model_error";
 import { HttpMethod } from "./http_util";
+import { ExpressIdBuilder, ExpressIdType } from "./id_util";
 
 export class HTTPRouteModel {
   constructor(private path: string, private method: HttpMethod) {}
@@ -12,14 +15,25 @@ export class HTTPRouteModel {
   }
 
   public toString() {
-    return `${this.method}:${this.path}`;
+    return new ExpressIdBuilder()
+      .setType(ExpressIdType.ROUTE_MODEL)
+      .addContent(this.Method)
+      .addContent(this.Path)
+      .build();
   }
 
-  static add(lhs: string, rhs: HTTPRouteModel) {
-    return new HTTPRouteModel(`${lhs}${rhs.Path}`, rhs.Method);
+  public addPrefix(lhs: string) {
+    this.path = `${lhs}${this.Path}`;
   }
 
   // Factory methods
+  static fromString(id: string) {
+    const data = IDUtil.getIdData(id);
+    if (data[0] !== ExpressIdType.ROUTE_MODEL || data.length < 3)
+      throw HTTPRouteModelError.invalidString(id);
+    else return new HTTPRouteModel(data[2], data[1] as HttpMethod);
+  }
+
   static GET(path: string) {
     return new HTTPRouteModel(path, HttpMethod.GET);
   }

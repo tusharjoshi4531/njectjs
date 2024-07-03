@@ -8,7 +8,6 @@ export class IOCContainerRepository {
   constructor() {
     this.containerObjectMap = new Map();
     this.containerConstructorMap = new Map();
-
   }
 
   public addConstructor(id: string, constructor: Constructor<any>) {
@@ -35,11 +34,15 @@ export class IOCContainerRepository {
   }
 
   public findAllObjectIds() {
-    return [...this.containerObjectMap.keys()];
+    return Array.from(this.containerObjectMap.keys());
+  }
+
+  public findAllObjects() {
+    return Array.from(this.containerObjectMap.values());
   }
 
   public findAllConstructorIds() {
-    return [...this.containerConstructorMap.keys()];
+    return Array.from(this.containerConstructorMap.keys());
   }
 
   public buildConstructorObject(id: string, dependancies: string[]) {

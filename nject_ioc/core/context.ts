@@ -3,7 +3,20 @@ import { IOCContainerRepository } from "./container_repository";
 import { DependancyManager } from "./dependancy_manager";
 import { TagManager } from "./tag_manager";
 
-export class IOCContext {
+export interface IOCContextInterface {
+  addConstructor(id: string, constructor: Constructor<any>): void;
+  addDependancy(dependant: string, dependancy: string): void;
+  addTag(id: string, tag: string): void;
+  getIdTags(id: string): string[];
+  getIdsWithTag(tag: string): string[];
+  getObjectByID(id: string): any; // Assuming any return type for simplicity
+  getObjectIds(): string[];
+  getAllObjects(): [string, any][]
+  getConstructorIDs(): string[];
+  build(): void;
+}
+
+export class IOCContext implements IOCContextInterface {
   private containerRepository: IOCContainerRepository;
   private dependancyManager: DependancyManager;
   private tagManager: TagManager;
@@ -13,6 +26,7 @@ export class IOCContext {
     this.dependancyManager = new DependancyManager();
     this.tagManager = new TagManager();
   }
+  
 
   public addConstructor(id: string, constructor: Constructor<any>) {
     this.containerRepository.addConstructor(id, constructor);
@@ -28,19 +42,23 @@ export class IOCContext {
   }
 
   public getIdTags(id: string) {
-    this.tagManager.getIdTags(id);
+    return Array.from(this.tagManager.getIdTags(id));
   }
 
   public getIdsWithTag(tag: string) {
-    this.tagManager.getIdsWithTag(tag);
+    return this.tagManager.getIdsWithTag(tag);
   }
 
   public getObjectByID(id: string) {
-    this.containerRepository.findObjectById(id);
+    return this.containerRepository.findObjectById(id);
   }
 
   public getObjectIds() {
     return this.containerRepository.findAllObjectIds();
+  }
+
+  getAllObjects(): [string, any][] {
+    return this.containerRepository.findAllObjects();
   }
 
   public getConstructorIDs() {
@@ -48,11 +66,17 @@ export class IOCContext {
   }
 
   public build() {
+    console.log("BUILD");
     const order = this.dependancyManager.getResolutionOrder();
 
     for (const id of order) {
       const dependancies = this.dependancyManager.getDependancies(id);
       this.containerRepository.buildConstructorObject(id, dependancies);
     }
+
+    console.log({ order: order.join(", ") });
+    order.forEach((id) =>
+      console.log({ id: this.containerRepository.findObjectById(id) })
+    );
   }
 }

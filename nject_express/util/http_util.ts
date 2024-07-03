@@ -7,7 +7,10 @@ export enum HttpMethod {
   OPTIONS = "OPTIONS",
   HEAD = "HEAD",
   ALL = "ALL",
+  CONNECT = "CONNECT",
+  TRACE = "TRACE"
 }
+
 
 export enum HttpStatusCode {
   // Informational responses (100–199)

@@ -4,6 +4,8 @@ import { Constructor } from "../../nject_ioc/util/types";
 export class ExpressIdType {
   static CONTROLLER = "controller";
   static HANDLER = "handler";
+  static APPLICATION = "express_application";
+  static ROUTE_MODEL = "route_model";
 }
 
 export class ExpressIdBuilder extends IDBuilder {
@@ -17,4 +19,3 @@ export class ExpressIdBuilder extends IDBuilder {
     return new ExpressIdBuilder(ExpressIdType.HANDLER).addContent(methodName);
   }
 }
-

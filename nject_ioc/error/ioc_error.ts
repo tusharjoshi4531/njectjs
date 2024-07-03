@@ -16,7 +16,7 @@ export class IOCError {
   }
 
   static contextNotFound(id: string) {
-    return new Error(`Context with ID: ${id} already exists.`);
+    return new Error(`Context with ID: ${id} does not exists.`);
   }
 
   static duplicateContextId(id: string) {

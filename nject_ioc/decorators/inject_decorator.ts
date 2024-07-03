@@ -8,7 +8,6 @@ export function Inject(parameterConstructor: Constructor) {
     propertyKey: string | undefined,
     parameterIndex: number
   ) {
-    const componentId = IDBuilder.fromComponent(target).build();
     const parameterId = IDBuilder.fromComponent(parameterConstructor).build();
 
     if (propertyKey !== undefined) {

@@ -1,8 +1,9 @@
 import { IOCError } from "../error/ioc_error";
-import { IOCContext } from "./context";
+import { IOCContainerRepository } from "./container_repository";
+import { IOCContext, IOCContextInterface } from "./context";
 
 class IOCContenxtRegistry {
-  contextMap: Map<string, IOCContext>;
+  contextMap: Map<string, IOCContextInterface>;
   constructor() {
     this.contextMap = new Map();
   }
@@ -19,16 +20,28 @@ class IOCContenxtRegistry {
     return context;
   }
 
-  public registerContext(id: string, context?: IOCContext) {
+  public registerContext(id: string, context?: IOCContextInterface) {
     if (this.contextMap.has(id)) {
       throw IOCError.duplicateContextId(id);
     }
-    if (!context) context = new IOCContext();
+    context = context ?? new IOCContext();
     this.contextMap.set(id, context);
+    return context;
   }
 
   public getRegisteredContextIds() {
     return this.contextMap.keys();
+  }
+
+  public replaceContext(id: string, context: IOCContextInterface) {
+    if (!this.contextMap.has(id)) {
+      throw IOCError.contextNotFound(id);
+    }
+    this.contextMap.set(id, context);
+  }
+
+  public isRegistered(id: string) {
+    return this.contextMap.has(id);
   }
 }
 

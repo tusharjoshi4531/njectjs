@@ -12,7 +12,11 @@ import { SocketIOIdType } from "../utils/id_utils";
 export function SocketIOApplication(
   constructor: Constructor<SocketIOApplicationContainer>
 ) {
-  Component(SOCKETIO_CONTEXT_NAME, [SOCKET_TAG], SocketIOIdType.APPLICATION);
+  Component(
+    SOCKETIO_CONTEXT_NAME,
+    [SOCKET_TAG],
+    SocketIOIdType.APPLICATION
+  )(constructor);
 
   const socketContext = contextRegistry.getContextById(
     SOCKETIO_CONTEXT_NAME
@@ -24,6 +28,6 @@ export function SocketIOApplication(
 
   console.log("2");
 
-  console.log("BUILD SOCKET")
+  console.log("BUILD SOCKET");
   socketContext.build();
 }

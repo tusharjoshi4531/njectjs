@@ -12,7 +12,8 @@ import { SocketIORouteHandlerParameter } from "../utils/socketio_route_parameter
 
 export function SocketController(namespace: string) {
   return function (constructor: Constructor) {
-    Component(SOCKETIO_CONTEXT_NAME, [SOCKET_TAG], SocketIOIdType.CONTROLLER);
+    console.log({ const: constructor.name });
+    Component(SOCKETIO_CONTEXT_NAME, [SOCKET_TAG], SocketIOIdType.CONTROLLER)(constructor);
 
     const constructorId = SocketIOIdBuilder.fromController(constructor).build();
     const handlers: [string, string][] = (constructor as any).handlers ?? [];

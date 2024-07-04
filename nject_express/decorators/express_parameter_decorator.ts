@@ -13,7 +13,7 @@ export function RequestParam(paramType: HTTPRouteHandlerParameter) {
     ).build();
 
     if (!target.params) {
-      target.params = new Map<string, Array<[number, string]>>();
+      target.params = new Map<string, Array<[number, HTTPRouteHandlerParameter]>>();
     }
     const params = target.params as Map<
       string,

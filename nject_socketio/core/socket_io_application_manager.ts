@@ -72,6 +72,9 @@ export class SocketIOApplicationManager {
     const handlerName = IDUtil.getIdData(handlerId)[1];
 
     const context = contextRegistry.getContextById(SOCKETIO_CONTEXT_NAME);
+    console.log(context.getConstructorIDs());
+    console.log(context.getObjectIds());
+    console.log(context.getAllObjects());
     const controllerObject = context.getObjectByID(parentId);
 
     const messageHandler: (...args: any[]) => void = async (

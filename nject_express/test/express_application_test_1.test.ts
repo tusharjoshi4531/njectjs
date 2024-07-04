@@ -8,7 +8,7 @@ import {
 
 import { RestController } from "../decorators/rest_controller_decorator";
 import { GET, POST } from "../decorators/rest_handler_decorator";
-import { RequestParam } from "../decorators/parameter_decorator";
+import { RequestParam } from "../decorators/express_parameter_decorator";
 import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { ResponseEntity } from "../core/server_entities/server_response_entity";
 import { NextEntity } from "../core/server_entities/server_next_entity";

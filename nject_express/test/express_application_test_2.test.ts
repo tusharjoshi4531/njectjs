@@ -16,7 +16,7 @@ import {
   RequestBody,
   RequestHeaders,
   RequestQuery,
-} from "../decorators/parameter_decorator";
+} from "../decorators/express_parameter_decorator";
 import { RestController } from "../decorators/rest_controller_decorator";
 import { GET, PATCH, POST } from "../decorators/rest_handler_decorator";
 import { Service } from "../decorators/service_decorator";

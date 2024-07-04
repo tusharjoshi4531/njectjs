@@ -1,7 +1,7 @@
-import { RouteHandlerParameter } from "../util/express_route_params_util";
+import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { ExpressIdBuilder } from "../util/id_util";
 
-export function RequestParam(paramType: RouteHandlerParameter) {
+export function RequestParam(paramType: HTTPRouteHandlerParameter) {
   return function (
     targetPrototype: any,
     propertyKey: string | symbol,
@@ -17,7 +17,7 @@ export function RequestParam(paramType: RouteHandlerParameter) {
     }
     const params = target.params as Map<
       string,
-      Array<[number, RouteHandlerParameter]>
+      Array<[number, HTTPRouteHandlerParameter]>
     >;
     if (!params.get(handlerId)) {
       params.set(handlerId, []);
@@ -26,11 +26,11 @@ export function RequestParam(paramType: RouteHandlerParameter) {
   };
 }
 
-export const RequestObject = RequestParam(RouteHandlerParameter.REQUEST);
-export const RequestBody = RequestParam(RouteHandlerParameter.REQUEST_BODY);
-export const RequestQuery = RequestParam(RouteHandlerParameter.REQUSET_QUERY);
-export const PathVariable = RequestParam(RouteHandlerParameter.REQUEST_PARAMS);
+export const RequestObject = RequestParam(HTTPRouteHandlerParameter.REQUEST);
+export const RequestBody = RequestParam(HTTPRouteHandlerParameter.REQUEST_BODY);
+export const RequestQuery = RequestParam(HTTPRouteHandlerParameter.REQUSET_QUERY);
+export const PathVariable = RequestParam(HTTPRouteHandlerParameter.REQUEST_PARAMS);
 export const RequestHeaders = RequestParam(
-  RouteHandlerParameter.REQUEST_HEADERS
+  HTTPRouteHandlerParameter.REQUEST_HEADERS
 );
-export const ResponseObject = RequestParam(RouteHandlerParameter.RESPONSE);
+export const ResponseObject = RequestParam(HTTPRouteHandlerParameter.RESPONSE);

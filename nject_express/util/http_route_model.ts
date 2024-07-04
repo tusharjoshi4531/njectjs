@@ -29,9 +29,11 @@ export class HTTPRouteModel {
   // Factory methods
   static fromString(id: string) {
     const data = IDUtil.getIdData(id);
-    if (data[0] !== ExpressIdType.ROUTE_MODEL || data.length < 3)
+    if (data[0] !== ExpressIdType.ROUTE_MODEL || data.length < 3) {
       throw HTTPRouteModelError.invalidString(id);
-    else return new HTTPRouteModel(data[2], data[1] as HttpMethod);
+    }
+
+    return new HTTPRouteModel(data[2], data[1] as HttpMethod);
   }
 
   static GET(path: string) {

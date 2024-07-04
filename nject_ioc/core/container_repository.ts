@@ -46,9 +46,16 @@ export class IOCContainerRepository {
   }
 
   public buildConstructorObject(id: string, dependancies: string[]) {
+    //Check if constructor object is already built
+    if (this.containerObjectMap.has(id)) {
+      return;
+    }
+
     const dependacyObjects = dependancies.map((dependancy) =>
       this.containerObjectMap.get(dependancy)
     );
+
+    console.log(id);
 
     const unbuiltDependancies = dependancies.filter(
       (dependancy) => !this.containerObjectMap.has(dependancy)

@@ -66,7 +66,7 @@ export class IOCContext implements IOCContextInterface {
   }
 
   public build() {
-
+    console.log("4");
     const order = this.dependancyManager.getResolutionOrder();
 
     for (const id of order) {

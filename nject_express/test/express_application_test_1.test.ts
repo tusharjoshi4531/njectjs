@@ -1,19 +1,18 @@
 import { contextRegistry } from "../../nject_ioc/core/context_registry";
 import {
-  ExpressApplicationContainer,
-  ExpressApplicationContext,
-} from "../core/application_context";
-import {
   DEFAULT,
   EXPRESS_CONTEXT_NAME,
-  ExpressApplication,
-} from "../decorators/express_application_decorator";
+  ExpressApplicationContainer,
+  ExpressApplicationContext,
+} from "../core/express_application_context";
+
 import { RestController } from "../decorators/rest_controller_decorator";
 import { GET, POST } from "../decorators/rest_handler_decorator";
-import { RequestParam } from "../decorators/parameter_decorator";
-import { RouteHandlerParameter } from "../util/express_route_params_util";
+import { RequestParam } from "../decorators/express_parameter_decorator";
+import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { ResponseEntity } from "../core/server_entities/server_response_entity";
 import { NextEntity } from "../core/server_entities/server_next_entity";
+import { ExpressApplication } from "../decorators/express_application_decorator";
 
 const context = contextRegistry.registerContext(DEFAULT);
 const expressContext = new ExpressApplicationContext(context);
@@ -26,7 +25,7 @@ class A {}
 class B {
   // TODO: fix parameter error
   @GET("/test", 100)
-  public a(@RequestParam(RouteHandlerParameter.REQUEST_BODY) body: any) {
+  public a(@RequestParam(HTTPRouteHandlerParameter.REQUEST_BODY) body: any) {
     console.log(body);
     body.t = "b";
     return ResponseEntity.ok(body);
@@ -45,7 +44,7 @@ class B {
 
 @ExpressApplication
 class App implements ExpressApplicationContainer {
-  getServerOptions = () => ({
+  getExpressServerOptions = () => ({
     port: 8081,
   });
 }

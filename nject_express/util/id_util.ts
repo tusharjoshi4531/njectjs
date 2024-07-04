@@ -2,10 +2,10 @@ import { IDBuilder } from "../../nject_ioc/util/id_util";
 import { Constructor } from "../../nject_ioc/util/types";
 
 export class ExpressIdType {
-  static CONTROLLER = "controller";
-  static HANDLER = "handler";
+  static CONTROLLER = "express_controller";
+  static HANDLER = "express_handler";
   static APPLICATION = "express_application";
-  static ROUTE_MODEL = "route_model";
+  static ROUTE_MODEL = "express_route_model";
 }
 
 export class ExpressIdBuilder extends IDBuilder {

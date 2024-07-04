@@ -2,31 +2,45 @@ import { IOCContextInterface } from "../../nject_ioc/core/context";
 import { IOCContextDecorator } from "../../nject_ioc/core/context_decorator";
 import { HTTPRouteHandlerModel } from "../util/http_route_handler_model";
 import { RouteControllerManager } from "./route_controller_manager";
-import { RouteHandlerManager } from "./route_handler_manager";
 import express from "express";
 import {
   ExpressApplicationManager,
   ExpressServerOptions,
 } from "./express_application_manager";
 import { ExpressContextError } from "../error/express_context_error";
-import { RouteHandlerParameter } from "../util/express_route_params_util";
+import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
+import { Server } from "http";
+import { ExpressRouteHandlerManager } from "./express_route_handler_manager";
+
+// TODO: figure out how to globalize this
+export const DEFAULT = "default";
+export const EXPRESS_CONTEXT_NAME = "express_context";
+export const REST_TAG = "rest";
 
 export interface ExpressApplicationContainer {
-  getServerOptions?: () => Partial<ExpressServerOptions>;
-  preconfig?: (app: express.Express) => void;
+  getExpressServerOptions?: () => Partial<ExpressServerOptions>;
+  preconfigExpress?: (app: express.Express) => void;
 }
 
-export class ExpressApplicationContext extends IOCContextDecorator {
+export interface ServerContext {
+  get HttpServer(): Server;
+  startServer(): void;
+}
+
+export class ExpressApplicationContext
+  extends IOCContextDecorator
+  implements ServerContext
+{
   private routeControllerManager: RouteControllerManager;
-  private routeHandlerManager: RouteHandlerManager;
-  private expressApplicationManager: ExpressApplicationManager;
+  private routeHandlerManager: ExpressRouteHandlerManager;
+  private applicationManager: ExpressApplicationManager;
   private applicationContainer: ExpressApplicationContainer | undefined;
 
   constructor(context: IOCContextInterface) {
     super(context);
     this.routeControllerManager = new RouteControllerManager();
-    this.routeHandlerManager = new RouteHandlerManager();
-    this.expressApplicationManager = new ExpressApplicationManager(
+    this.routeHandlerManager = new ExpressRouteHandlerManager();
+    this.applicationManager = new ExpressApplicationManager(
       this.routeHandlerManager
     );
   }
@@ -40,7 +54,7 @@ export class ExpressApplicationContext extends IOCContextDecorator {
   public addController(
     controllerId: string,
     path: string,
-    handlers: [string, HTTPRouteHandlerModel, RouteHandlerParameter[]][]
+    handlers: [string, HTTPRouteHandlerModel, HTTPRouteHandlerParameter[]][]
   ) {
     this.routeControllerManager.addController(
       controllerId,
@@ -69,17 +83,31 @@ export class ExpressApplicationContext extends IOCContextDecorator {
 
   override build(): void {
     super.build();
-    
+
     if (!this.applicationContainer) {
       throw ExpressContextError.noApplicationContainer();
     }
     const getServerOptions =
-      this.applicationContainer.getServerOptions ??
+      this.applicationContainer.getExpressServerOptions ??
       function () {
         return {};
       };
 
-    this.expressApplicationManager.ServerOptions = getServerOptions();
-    this.expressApplicationManager.boot(this.applicationContainer.preconfig);
+    this.applicationManager.ServerOptions = getServerOptions();
+    this.applicationManager.createServer(
+      this.applicationContainer.preconfigExpress
+    );
+  }
+
+  public startServer(): void {
+    this.applicationManager.startServer();
+  }
+
+  get HttpServer(): Server {
+    const server = this.applicationManager.HttpServer;
+    if (!server) {
+      throw ExpressContextError.noHttpServer();
+    }
+    return server;
   }
 }

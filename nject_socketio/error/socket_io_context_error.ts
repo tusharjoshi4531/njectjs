@@ -1,4 +1,4 @@
-export class ExpressContextError {
+export class SocketIOContextError {
   static noApplicationContainer() {
     return new Error(
       "Application container is not assigned to express server context"

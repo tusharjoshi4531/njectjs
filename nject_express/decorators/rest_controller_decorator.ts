@@ -1,14 +1,14 @@
 import { contextRegistry } from "../../nject_ioc/core/context_registry";
 import { Component } from "../../nject_ioc/decorators/component_decorator";
 import { Constructor } from "../../nject_ioc/util/types";
-import { ExpressApplicationContext } from "../core/application_context";
-import { RouteHandlerParameter } from "../util/express_route_params_util";
-import { HTTPRouteHandlerModel } from "../util/http_route_handler_model";
-import { ExpressIdBuilder, ExpressIdType } from "../util/id_util";
 import {
   EXPRESS_CONTEXT_NAME,
+  ExpressApplicationContext,
   REST_TAG,
-} from "./express_application_decorator";
+} from "../core/express_application_context";
+import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
+import { HTTPRouteHandlerModel } from "../util/http_route_handler_model";
+import { ExpressIdBuilder, ExpressIdType } from "../util/id_util";
 
 export function RestController(path: string = "") {
   return function (constructor: Constructor) {
@@ -22,7 +22,7 @@ export function RestController(path: string = "") {
     const handlers: [string, boolean, HTTPRouteHandlerModel][] =
       (constructor as any).handlers ?? [];
 
-    const params: Map<string, Array<[number, RouteHandlerParameter]>> = (
+    const params: Map<string, Array<[number, HTTPRouteHandlerParameter]>> = (
       constructor as any
     ).params ?? new Map();
 
@@ -39,9 +39,8 @@ export function RestController(path: string = "") {
       const handlerParams = params.get(id) ?? [];
       handlerParams.sort((a, b) => a[0] - b[0]);
       return [id, model, handlerParams.map(([_, parameter]) => parameter)];
-    }) as [string, HTTPRouteHandlerModel, RouteHandlerParameter[]][];
+    }) as [string, HTTPRouteHandlerModel, HTTPRouteHandlerParameter[]][];
 
     context.addController(constructorId, path, handlersWithParams);
-    console.log(context.displayControllersString());
   };
 }

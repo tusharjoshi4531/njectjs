@@ -1,5 +1,4 @@
 import { ControllerError } from "../error/controller_error";
-import { HTTPRouteModel } from "../util/http_route_model";
 
 export class RouteControllerManager {
   private controllerToRouteMap: Map<string, string>;

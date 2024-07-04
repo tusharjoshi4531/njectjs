@@ -2,13 +2,13 @@ import { IncomingHttpHeaders } from "http";
 import { contextRegistry } from "../../nject_ioc/core/context_registry";
 import { Inject } from "../../nject_ioc/decorators/inject_decorator";
 import {
-  ExpressApplicationContainer,
-  ExpressApplicationContext,
-} from "../core/application_context";
-import { ResponseEntity } from "../core/server_entities/server_response_entity";
-import {
   DEFAULT,
   EXPRESS_CONTEXT_NAME,
+  ExpressApplicationContainer,
+  ExpressApplicationContext,
+} from "../core/express_application_context";
+import { ResponseEntity } from "../core/server_entities/server_response_entity";
+import {
   ExpressApplication,
 } from "../decorators/express_application_decorator";
 import {
@@ -16,7 +16,7 @@ import {
   RequestBody,
   RequestHeaders,
   RequestQuery,
-} from "../decorators/parameter_decorator";
+} from "../decorators/express_parameter_decorator";
 import { RestController } from "../decorators/rest_controller_decorator";
 import { GET, PATCH, POST } from "../decorators/rest_handler_decorator";
 import { Service } from "../decorators/service_decorator";
@@ -140,3 +140,5 @@ class Store {
 
 @ExpressApplication
 class Application implements ExpressApplicationContainer {}
+
+expressContext.startServer();

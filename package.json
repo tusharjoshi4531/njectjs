@@ -18,7 +18,9 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@types/socket.io": "^3.0.2",
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
   }
 }

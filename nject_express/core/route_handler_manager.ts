@@ -1,12 +1,11 @@
 import { ControllerError } from "../error/controller_error";
-import { RouteHandlerParameter } from "../util/express_route_params_util";
+import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { HTTPRouteHandlerModel } from "../util/http_route_handler_model";
-import { HTTPRouteModel } from "../util/http_route_model";
 
-export class RouteHandlerManager {
-  private handlerToPath: Map<string, HTTPRouteHandlerModel>;
+export class RouteHandlerManager<RouteHandlerModel, ParameterModel> {
+  private handlerToPath: Map<string, RouteHandlerModel>;
   private handlerToParent: Map<string, string>;
-  private handlerToParams: Map<string, RouteHandlerParameter[]>;
+  private handlerToParams: Map<string, ParameterModel[]>;
 
   constructor() {
     this.handlerToPath = new Map();
@@ -14,16 +13,12 @@ export class RouteHandlerManager {
     this.handlerToParams = new Map();
   }
 
-  public addHandler(
-    id: string,
-    parentId: string,
-    model: HTTPRouteHandlerModel
-  ) {
+  public addHandler(id: string, parentId: string, model: RouteHandlerModel) {
     this.handlerToPath.set(id, model);
     this.handlerToParent.set(id, parentId);
   }
 
-  public addParams(id: string, params: RouteHandlerParameter[]) {
+  public addParams(id: string, params: ParameterModel[]) {
     this.handlerToParams.set(id, params);
   }
 
@@ -50,35 +45,5 @@ export class RouteHandlerManager {
   public getAllHandlersWithRoute() {
     return Array.from(this.handlerToPath.entries());
   }
-
-  public getAllRoutesWithHandlers() {
-    const intermediateRoutes = new Map<string, [number, string][]>();
-
-    for (const [id, routeHandlerModel] of this.handlerToPath.entries()) {
-      const routeModel = routeHandlerModel.Route;
-      const routeModelString = routeModel.toString();
-      const order = routeHandlerModel.Order;
-
-      if (!intermediateRoutes.has(routeModelString)) {
-        intermediateRoutes.set(routeModelString, []);
-      }
-      intermediateRoutes.get(routeModelString)!.push([order, id]);
-    }
-
-    for (const key of intermediateRoutes.keys()) {
-      intermediateRoutes.get(key)?.sort((a, b) => a[0] - b[0]);
-    }
-
-    const routes = Array.from(intermediateRoutes.entries()).map(
-      ([id, value]) => [
-        id,
-        value.map(([_, handlerId]) => [
-          handlerId,
-          this.getHandlerParams(handlerId),
-        ]),
-      ]
-    ) as [string, Array<[string, RouteHandlerParameter[]]>][];
-
-    return routes;
-  }
 }
+

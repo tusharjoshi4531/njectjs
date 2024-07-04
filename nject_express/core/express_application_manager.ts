@@ -1,19 +1,21 @@
 import express, { RequestHandler } from "express";
 import http from "http";
 import cors from "cors";
-import { RouteHandlerManager } from "./route_handler_manager";
+
 import { HTTPRouteModel } from "../util/http_route_model";
 import {
-  RequestParamUtil,
-  RouteHandlerParameter,
+  HTTPRequestParamUtil,
+  HTTPRouteHandlerParameter,
 } from "../util/express_route_params_util";
 import { contextRegistry } from "../../nject_ioc/core/context_registry";
-import { EXPRESS_CONTEXT_NAME } from "../decorators/express_application_decorator";
 import { IDUtil } from "../../nject_ioc/util/id_util";
 import { HttpMethod } from "../util/http_util";
 import { ResponseEntity } from "./server_entities/server_response_entity";
 import { NextEntity } from "./server_entities/server_next_entity";
 import { HttpStatusCode } from "./server_entities/server_response_status";
+import { ExpressRouteHandlerManager } from "./express_route_handler_manager";
+import { ExpressContextError } from "../error/express_context_error";
+import { EXPRESS_CONTEXT_NAME } from "./express_application_context";
 
 export interface ExpressServerOptions {
   port: number;
@@ -25,7 +27,7 @@ export class ExpressApplicationManager {
   private server: http.Server | undefined;
   private serverOptions: ExpressServerOptions;
 
-  constructor(private routeHanlderManager: RouteHandlerManager) {
+  constructor(private routeHanlderManager: ExpressRouteHandlerManager) {
     this.app = express();
     this.serverOptions = {
       port: 8080,
@@ -40,7 +42,11 @@ export class ExpressApplicationManager {
     this.serverOptions.cors = options.cors ?? this.serverOptions.cors;
   }
 
-  public boot(preconfig?: (app: express.Express) => void) {
+  public get HttpServer() {
+    return this.server;
+  }
+
+  public createServer(preconfig?: (app: express.Express) => void) {
     this.app.use(express.json());
     this.app.use(cors(this.serverOptions.cors));
 
@@ -54,16 +60,19 @@ export class ExpressApplicationManager {
       const routeModel = HTTPRouteModel.fromString(route);
       const method = routeModel.Method;
       const path = routeModel.Path;
-      console.log({ path });
 
-      const requestHandlers = handlersWithParams.map(([handlerId, params]) => {
-        const requestHandler = this.createExpessHandler(handlerId, params);
-        return requestHandler;
-      });
+      const requestHandlers = handlersWithParams.map(([handlerId, params]) =>
+        this.createExpessHandler(handlerId, params)
+      );
 
       this.attachRouteHandler(method, path, requestHandlers);
     });
+  }
 
+  public startServer() {
+    if (!this.server) {
+      throw ExpressContextError.noHttpServer();
+    }
     this.server.listen(this.serverOptions.port, () => {
       console.log(`Server is running at port ${this.serverOptions.port}`);
     });
@@ -71,7 +80,7 @@ export class ExpressApplicationManager {
 
   private createExpessHandler(
     handlerId: string,
-    params: RouteHandlerParameter[]
+    params: HTTPRouteHandlerParameter[]
   ) {
     const parentId = this.routeHanlderManager.getParentById(handlerId);
     const handlerName = IDUtil.getIdData(handlerId)[1];
@@ -79,11 +88,9 @@ export class ExpressApplicationManager {
     const context = contextRegistry.getContextById(EXPRESS_CONTEXT_NAME);
     const controllerObject = context.getObjectByID(parentId);
 
-    console.log("p ", params.join(", "));
-
     const requestHandler: RequestHandler = async (req, res, next) => {
       const functionParams = params.map((routeHandlerParam) =>
-        RequestParamUtil.getProperty(routeHandlerParam, req, res)
+        HTTPRequestParamUtil.getProperty(routeHandlerParam, req, res)
       );
 
       const fn = controllerObject[handlerName].bind(controllerObject);
@@ -91,7 +98,6 @@ export class ExpressApplicationManager {
       try {
         const result = await fn(...functionParams);
 
-        if (functionParams.length > 0) console.log("T ", functionParams[0]);
         if (result instanceof ResponseEntity) {
           return res.status(result.Status).json(result.Body);
         } else if (result instanceof NextEntity) {

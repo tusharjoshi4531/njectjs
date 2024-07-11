@@ -1,7 +1,7 @@
 import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { ExpressIdBuilder } from "../util/id_util";
 
-export function RequestParam(paramType: HTTPRouteHandlerParameter) {
+export function ExpressRequestParam(paramType: HTTPRouteHandlerParameter) {
   return function (
     targetPrototype: any,
     propertyKey: string | symbol,
@@ -26,11 +26,11 @@ export function RequestParam(paramType: HTTPRouteHandlerParameter) {
   };
 }
 
-export const RequestObject = RequestParam(HTTPRouteHandlerParameter.REQUEST);
-export const RequestBody = RequestParam(HTTPRouteHandlerParameter.REQUEST_BODY);
-export const RequestQuery = RequestParam(HTTPRouteHandlerParameter.REQUSET_QUERY);
-export const PathVariable = RequestParam(HTTPRouteHandlerParameter.REQUEST_PARAMS);
-export const RequestHeaders = RequestParam(
+export const RequestObject = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST);
+export const RequestBody = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST_BODY);
+export const RequestQuery = ExpressRequestParam(HTTPRouteHandlerParameter.REQUSET_QUERY);
+export const PathVariable = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST_PARAMS);
+export const RequestHeaders = ExpressRequestParam(
   HTTPRouteHandlerParameter.REQUEST_HEADERS
 );
-export const ResponseObject = RequestParam(HTTPRouteHandlerParameter.RESPONSE);
+export const ResponseObject = ExpressRequestParam(HTTPRouteHandlerParameter.RESPONSE);

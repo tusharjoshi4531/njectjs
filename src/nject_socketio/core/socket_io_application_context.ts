@@ -11,7 +11,7 @@ import { SocketIORouteHandlerParameter } from "../utils/socketio_route_parameter
 import { SocketIORouteHandlerModel } from "../utils/socketio_route_handler_model";
 import { SocketIOContextError } from "../error/socket_io_context_error";
 
-export const DEFAULT = "default";
+// export const DEFAULT = "default";
 export const SOCKETIO_CONTEXT_NAME = "socketio_context";
 export const SOCKET_TAG = "socket";
 

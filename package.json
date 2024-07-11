@@ -1,20 +1,24 @@
 {
-  "name": "njectjs-v2",
+  "name": "njectjs",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Tushar Joshi",
+  "license": "MIT",
+  "description": "Library for building server side applications using decorators and dependancy injection",
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
     "typescript": "^5.5.3"
   },
   "dependencies": {
@@ -22,5 +26,13 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tusharjoshi4531/njectjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tusharjoshi4531/njectjs/issues"
+  },
+  "homepage": "https://github.com/tusharjoshi4531/njectjs#readme"
 }

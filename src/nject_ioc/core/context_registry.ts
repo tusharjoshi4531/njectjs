@@ -2,7 +2,7 @@ import { IOCError } from "../error/ioc_error";
 import { IOCContainerRepository } from "./container_repository";
 import { IOCContext, IOCContextInterface } from "./context";
 
-class IOCContenxtRegistry {
+class IOCContextRegistry {
   contextMap: Map<string, IOCContextInterface>;
   constructor() {
     this.contextMap = new Map();
@@ -45,4 +45,4 @@ class IOCContenxtRegistry {
   }
 }
 
-export const contextRegistry = new IOCContenxtRegistry();
+export const contextRegistry = new IOCContextRegistry();

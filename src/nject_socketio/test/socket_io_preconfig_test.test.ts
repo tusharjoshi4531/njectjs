@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import {
+  DEFAULT,
   EXPRESS_CONTEXT_NAME,
   ExpressApplicationContainer,
   ExpressApplicationContext,
@@ -8,7 +9,6 @@ import {
 import { ExpressApplication } from "../../nject_express/decorators/express_application_decorator";
 import { contextRegistry } from "../../nject_ioc/core/context_registry";
 import {
-  DEFAULT,
   SOCKETIO_CONTEXT_NAME,
   SocketIOApplicationContainer,
   SocketIOApplicationContext,

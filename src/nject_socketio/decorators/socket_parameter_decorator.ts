@@ -1,7 +1,7 @@
 import { SocketIOIdBuilder } from "../utils/id_utils";
 import { SocketIORouteHandlerParameter } from "../utils/socketio_route_parameter_util";
 
-export function RequestParam(paramType: SocketIORouteHandlerParameter) {
+export function SocketRequestParam(paramType: SocketIORouteHandlerParameter) {
   return function (
     targetPrototype: any,
     propertyKey: string | symbol,
@@ -30,9 +30,9 @@ export function RequestParam(paramType: SocketIORouteHandlerParameter) {
   };
 }
 
-export const IOSocket = RequestParam(SocketIORouteHandlerParameter.SOCKET);
-export const IOServer = RequestParam(
+export const IOSocket = SocketRequestParam(SocketIORouteHandlerParameter.SOCKET);
+export const IOServer = SocketRequestParam(
   SocketIORouteHandlerParameter.SOCKET_SERVER
 );
-export const IOData = RequestParam(SocketIORouteHandlerParameter.DATA);
-export const IOCallBAck = RequestParam(SocketIORouteHandlerParameter.CALLBACK);
+export const IOData = SocketRequestParam(SocketIORouteHandlerParameter.DATA);
+export const IOCallBack = SocketRequestParam(SocketIORouteHandlerParameter.CALLBACK);

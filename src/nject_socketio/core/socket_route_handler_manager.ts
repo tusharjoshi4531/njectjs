@@ -13,15 +13,17 @@ export class SocketIORouteHandlerManager extends RouteHandlerManager<
       [string, string, SocketIORouteHandlerParameter[]][]
     >();
 
-    for (const [id, routeHandlerModel] of handlers) {
-      const namespace = routeHandlerModel.Namespace;
-      const event = routeHandlerModel.Event;
-      const params = this.getHandlerParams(id);
+    for (const [id, routeHandlerModels] of handlers) {
+      for (const routeHandlerModel of routeHandlerModels) {
+        const namespace = routeHandlerModel.Namespace;
+        const event = routeHandlerModel.Event;
+        const params = this.getHandlerParams(id);
 
-      if (!routes.has(namespace)) {
-        routes.set(namespace, []);
+        if (!routes.has(namespace)) {
+          routes.set(namespace, []);
+        }
+        routes.get(namespace)!.push([event, id, params]);
       }
-      routes.get(namespace)!.push([event, id, params]);
     }
 
     return Array.from(routes.entries());

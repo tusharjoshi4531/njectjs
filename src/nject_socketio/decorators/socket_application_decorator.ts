@@ -22,12 +22,6 @@ export function SocketIOApplication(
     SOCKETIO_CONTEXT_NAME
   ) as SocketIOApplicationContext;
 
-  console.log("1");
-
   socketContext.ApplicationContainer = new constructor();
-
-  console.log("2");
-
-  console.log("BUILD SOCKET");
   socketContext.build();
 }

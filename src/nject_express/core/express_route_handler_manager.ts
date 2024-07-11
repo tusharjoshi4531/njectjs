@@ -10,15 +10,17 @@ export class ExpressRouteHandlerManager extends RouteHandlerManager<
     const intermediateRoutes = new Map<string, [number, string][]>();
     const handlers = this.getAllHandlersWithRoute();
 
-    for (const [id, routeHandlerModel] of handlers) {
-      const routeModel = routeHandlerModel.Route;
-      const routeModelString = routeModel.toString();
-      const order = routeHandlerModel.Order;
+    for (const [id, routeHandlerModels] of handlers) {
+      for (const routeHandlerModel of routeHandlerModels) {
+        const routeModel = routeHandlerModel.Route;
+        const routeModelString = routeModel.toString();
+        const order = routeHandlerModel.Order;
 
-      if (!intermediateRoutes.has(routeModelString)) {
-        intermediateRoutes.set(routeModelString, []);
+        if (!intermediateRoutes.has(routeModelString)) {
+          intermediateRoutes.set(routeModelString, []);
+        }
+        intermediateRoutes.get(routeModelString)!.push([order, id]);
       }
-      intermediateRoutes.get(routeModelString)!.push([order, id]);
     }
 
     for (const key of intermediateRoutes.keys()) {

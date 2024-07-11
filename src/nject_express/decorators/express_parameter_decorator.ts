@@ -29,7 +29,7 @@ export function ExpressRequestParam(paramType: HTTPRouteHandlerParameter) {
 export const RequestObject = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST);
 export const RequestBody = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST_BODY);
 export const RequestQuery = ExpressRequestParam(HTTPRouteHandlerParameter.REQUSET_QUERY);
-export const PathVariable = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST_PARAMS);
+export const PathVariables = ExpressRequestParam(HTTPRouteHandlerParameter.REQUEST_PARAMS);
 export const RequestHeaders = ExpressRequestParam(
   HTTPRouteHandlerParameter.REQUEST_HEADERS
 );

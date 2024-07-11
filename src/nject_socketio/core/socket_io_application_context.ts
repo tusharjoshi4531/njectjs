@@ -66,7 +66,6 @@ export class SocketIOApplicationContext extends IOCContextDecorator {
 
   override build(): void {
     super.build();
-    console.log("3");
 
     if (!this.applicationContainer) {
       throw SocketIOContextError.noApplicationContainer();
@@ -77,6 +76,8 @@ export class SocketIOApplicationContext extends IOCContextDecorator {
     if (getServerOptions)
       this.applicationManager.ServerOptions = getServerOptions!();
     this.applicationManager.HttpServer = this.serverContext.HttpServer;
-    this.applicationManager.createServer(this.applicationContainer.preconfigSocket);
+    this.applicationManager.createServer(
+      this.applicationContainer.preconfigSocket
+    );
   }
 }

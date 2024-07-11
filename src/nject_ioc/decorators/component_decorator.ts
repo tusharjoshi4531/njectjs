@@ -17,7 +17,6 @@ export function Component(
       .addContent(constructor.name)
       .build();
 
-    console.log({ constructorId });
     context.addConstructor(constructorId, constructor);
     tags.forEach((tag) => context.addTag(constructorId, tag));
 

@@ -11,7 +11,7 @@ export interface IOCContextInterface {
   getIdsWithTag(tag: string): string[];
   getObjectByID(id: string): any; // Assuming any return type for simplicity
   getObjectIds(): string[];
-  getAllObjects(): [string, any][]
+  getAllObjects(): [string, any][];
   getConstructorIDs(): string[];
   build(): void;
 }
@@ -26,7 +26,6 @@ export class IOCContext implements IOCContextInterface {
     this.dependancyManager = new DependancyManager();
     this.tagManager = new TagManager();
   }
-  
 
   public addConstructor(id: string, constructor: Constructor<any>) {
     this.containerRepository.addConstructor(id, constructor);
@@ -66,12 +65,21 @@ export class IOCContext implements IOCContextInterface {
   }
 
   public build() {
-    console.log("4");
     const order = this.dependancyManager.getResolutionOrder();
 
     for (const id of order) {
       const dependancies = this.dependancyManager.getDependancies(id);
       this.containerRepository.buildConstructorObject(id, dependancies);
     }
+
+    // Log all the components being managed
+    console.log("---- Managed Components ----");
+    const ids = this.containerRepository.findAllObjectIds();
+    ids.forEach((id) => {
+      const objConstructor =
+        this.containerRepository.findObjectById(id).constructor.name;
+      console.log(`${id} : ${objConstructor}`);
+    });
+    console.log("----------------------------\n");
   }
 }

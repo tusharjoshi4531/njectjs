@@ -37,3 +37,15 @@ export const POST = RestHandler.bind(this, HttpMethod.POST);
 export const DELETE = RestHandler.bind(this, HttpMethod.DELETE);
 export const PATCH = RestHandler.bind(this, HttpMethod.PATCH);
 export const PUT = RestHandler.bind(this, HttpMethod.PUT);
+
+export class Middleware {
+
+  static DEFAULT = (method: HttpMethod, path: string) =>
+    RestHandler(method, path, 0, true);
+  
+  static GET = (path: string) => this.DEFAULT(HttpMethod.GET, path);
+  static POST = (path: string) => this.DEFAULT(HttpMethod.POST, path);
+  static DELETE = (path: string) => this.DEFAULT(HttpMethod.DELETE, path);
+  static PATCH = (path: string) => this.DEFAULT(HttpMethod.PATCH, path);
+  static PUT = (path: string) => this.DEFAULT(HttpMethod.PUT, path);
+}

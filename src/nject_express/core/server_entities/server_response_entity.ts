@@ -46,6 +46,10 @@ export class ResponseEntity {
     return new ResponseEntity(HttpStatusCode.OK, body);
   }
 
+  static created(body: any = {}) {
+    return new ResponseEntity(HttpStatusCode.CREATED, body);
+  }
+
   static noContent() {
     return new ResponseEntity(HttpStatusCode.NO_CONTENT);
   }

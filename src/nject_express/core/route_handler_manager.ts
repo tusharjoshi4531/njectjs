@@ -3,7 +3,7 @@ import { HTTPRouteHandlerParameter } from "../util/express_route_params_util";
 import { HTTPRouteHandlerModel } from "../util/http_route_handler_model";
 
 export class RouteHandlerManager<RouteHandlerModel, ParameterModel> {
-  private handlerToPath: Map<string, RouteHandlerModel>;
+  private handlerToPath: Map<string, RouteHandlerModel[]>;
   private handlerToParent: Map<string, string>;
   private handlerToParams: Map<string, ParameterModel[]>;
 
@@ -14,7 +14,10 @@ export class RouteHandlerManager<RouteHandlerModel, ParameterModel> {
   }
 
   public addHandler(id: string, parentId: string, model: RouteHandlerModel) {
-    this.handlerToPath.set(id, model);
+    if (!this.handlerToPath.has(id)) {
+      this.handlerToPath.set(id, []);
+    }
+    this.handlerToPath.get(id)!.push(model);
     this.handlerToParent.set(id, parentId);
   }
 
@@ -46,4 +49,3 @@ export class RouteHandlerManager<RouteHandlerModel, ParameterModel> {
     return Array.from(this.handlerToPath.entries());
   }
 }
-

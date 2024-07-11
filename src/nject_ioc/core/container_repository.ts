@@ -55,7 +55,6 @@ export class IOCContainerRepository {
       this.containerObjectMap.get(dependancy)
     );
 
-    console.log(id);
 
     const unbuiltDependancies = dependancies.filter(
       (dependancy) => !this.containerObjectMap.has(dependancy)

@@ -12,7 +12,7 @@ import {
   ExpressApplication,
 } from "../decorators/express_application_decorator";
 import {
-  PathVariable,
+  PathVariables,
   RequestBody,
   RequestHeaders,
   RequestQuery,
@@ -42,7 +42,6 @@ class AuthService {
 
   public login(username: string, password: string) {
     let user: User | undefined;
-    console.log("USERS: ", this.users);
     this.users.forEach((i_user) => {
       if (i_user.username === username) {
         user = i_user;
@@ -116,7 +115,7 @@ class Store {
   }
 
   @GET("/:key")
-  public getItem(@PathVariable pathVar: { key: string }) {
+  public getItem(@PathVariables pathVar: { key: string }) {
     const result = this.store.get(pathVar.key);
     if (!result) {
       return ResponseEntity.notFound();
@@ -126,7 +125,7 @@ class Store {
 
   @PATCH("/:key")
   public updateItem(
-    @PathVariable { key }: { key: string },
+    @PathVariables { key }: { key: string },
     @RequestBody { item }: { item: string }
   ) {
     if (this.store.has(key)) {

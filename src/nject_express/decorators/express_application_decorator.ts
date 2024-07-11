@@ -22,8 +22,7 @@ export function ExpressApplication(
     EXPRESS_CONTEXT_NAME
   ) as ExpressApplicationContext;
   expressContext.ApplicationContainer = new constructor();
-
-  console.log("BUILD EXPRESS")
+  
   expressContext.build();
   // TODO: preconfiguration
 }

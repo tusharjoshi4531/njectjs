@@ -100,7 +100,20 @@ export class ExpressApplicationContext
   }
 
   public startServer(): void {
+    console.log("SERVER STARTING");
     this.applicationManager.startServer();
+
+    // Log all bound controllers
+    console.log("---- Bound Routes ----");
+    const routes = this.routeHandlerManager
+      .getAllRoutesWithHandlers()
+      .map(([route, handlers]) => [
+        route,
+        handlers.map(([handlerId, _]) => handlerId),
+      ]);
+    routes.forEach((route) => console.log(`${route[0]} - ${(route[1] as string[]).join(", ")}`));
+    console.log("----------------------\n");
+    console.log("SERVER STARTED");
   }
 
   get HttpServer(): Server {

@@ -1,6 +1,6 @@
 {
   "name": "njectjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -8,9 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup"
   },
-  "keywords": [],
+  "keywords": ["express", "server", "socket.io", "ioc", "http", "websocket"],
   "author": "Tushar Joshi",
-  "license": "MIT",
+  "license": "ISC",
   "description": "Library for building server side applications using decorators and dependancy injection",
   "devDependencies": {
     "@types/cors": "^2.8.17",
